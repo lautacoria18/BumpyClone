@@ -8,10 +8,20 @@ public class MainMenuManager : MonoBehaviour
 {
     [SerializeField]
     private Text lives;
+    [SerializeField]
+    private GameObject lifePanel;
     public void StartGame() {
 
+        if (LifeSystem.instance.lives == 0)
+        {
 
-        SceneManager.LoadScene("1");
+            lifePanel.SetActive(true);
+
+        }
+        else
+        {
+            SceneManager.LoadScene("1");
+        }
     }
     public void LoadSelectLevel() {
 
@@ -19,10 +29,10 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene("SelectLevel");
 
     }
+    public void CloseLifePanel() {
 
-    private void Start()
-    {
-        
+
+        lifePanel.SetActive(false);
     }
     private void Update()
     {

@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     public GameObject WinPanel;
     public GameObject LostPanel;
+    public GameObject LifePanel;
     public Text level;
     public Text lives;
 
@@ -57,7 +58,7 @@ public class UIManager : MonoBehaviour
     public void RestartLevel() {
         if (lifeSystem.GetLives() < 1)
         {
-
+            OpenLifePanel();
             Debug.Log("A esperar papi");
 
         }
@@ -66,4 +67,19 @@ public class UIManager : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
+
+    public void OpenLifePanel()
+    {
+        LifePanel.SetActive(true);
+
+
+    }
+    public void CloseLifePanel()
+    {
+
+
+        LifePanel.SetActive(false);
+
+    }
+
 }

@@ -107,11 +107,17 @@ public class LifeSystem : MonoBehaviour
         Debug.Log(showLifeTimeInMinutes());
         if (!timeLeft)
         {
-            timeLeft = GameObject.Find("timeLeft").GetComponent<Text>();
+           
+                timeLeft = GameObject.Find("timeLeft_2").GetComponent<Text>();
+           
 
         }
         if (lives < maxLives)
         {
+            if (GameObject.Find("timeLeft"))
+            {
+                GameObject.Find("timeLeft").GetComponent<Text>().text = showLifeTimeInMinutes();
+            }
             timeLeft.text = showLifeTimeInMinutes();
            
         }
