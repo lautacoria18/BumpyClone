@@ -12,7 +12,7 @@ public class BaseTemporary : MonoBehaviour
             if (transform.localScale.x - 0.3f < 0) { 
                 Destroy(gameObject);
             }
-            transform.localScale = new Vector3(transform.localScale.x - 0.3f, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(transform.localScale.x - 0.2f, transform.localScale.y, transform.localScale.z);
             //transform.localScale = Vector3.Lerp(transform.localScale, transform.localScale * 2, Time.deltaTime * 2);
         }
     }

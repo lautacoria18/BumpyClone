@@ -29,6 +29,11 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene("SelectLevel");
 
     }
+    public void LoadEditLevel() {
+
+        SceneManager.LoadScene("EditScene");
+
+    }
     public void CloseLifePanel() {
 
 

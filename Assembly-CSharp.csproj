@@ -60,6 +60,8 @@
     <Compile Include="Assets\1_Scripts\MainMenuManager.cs" />
     <Compile Include="Assets\1_Scripts\PauseMenu_Ui.cs" />
     <Compile Include="Assets\1_Scripts\BaseTemporary.cs" />
+    <Compile Include="Assets\1_Scripts\LifeSystem\LifeSystem.cs" />
+    <Compile Include="Assets\1_Scripts\UI\Stage_UI.cs" />
     <Compile Include="Assets\1_Scripts\UIManager.cs" />
     <Compile Include="Assets\1_Scripts\BallBehaviour.cs" />
     <Compile Include="Assets\1_Scripts\CellBehaviour.cs" />
@@ -70,7 +72,7 @@
     <Compile Include="Assets\1_Scripts\SelectLevelManager.cs" />
     <Compile Include="Assets\1_Scripts\ObjectsSelect.cs" />
     <Compile Include="Assets\1_Scripts\UIEdit.cs" />
-    <Compile Include="Assets\1_Scripts\LifeSystem\LifeSystem.cs" />
+    <Compile Include="Assets\1_Scripts\AudioAndSounds\AudioScript.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

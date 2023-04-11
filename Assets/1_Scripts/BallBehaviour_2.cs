@@ -1,7 +1,9 @@
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 public class BallBehaviour_2 : MonoBehaviour
 {
@@ -22,10 +24,16 @@ public class BallBehaviour_2 : MonoBehaviour
     public bool readyToCurveOnAir;
 
     public CellBehaviour currentCell;
+    public CellBehaviour cellWhenPressed;
     public Transform cellToMove;
 
     public bool isRight;
 
+    public AudioSource audsrc;
+    public AudioClip jump, lose, coin;
+    public int grades;
+    public float dur;
+    public int dir;
     
     private void Update()
     {
@@ -34,14 +42,16 @@ public class BallBehaviour_2 : MonoBehaviour
             {
                 if (readyToCurveOnAir && gameObject.GetComponent<Rigidbody2D>().velocity.y > 0 && isGoingUp)
                 {
-                    gameObject.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-                    StartCoroutine(Curve(gameObject.transform.position, currentCell.rightCell.GetComponent<CellBehaviour>().currentObject.transform.position));
+                GetComponent<Animator>().SetTrigger("Fall");
+                gameObject.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+                    StartCoroutine(Curve(gameObject.transform.position, currentCell.rightCell.GetComponent<CellBehaviour>().currentObject.transform.position, 360));
 
                 }
                 else
                 {
                 //StartCoroutine(Curve(a.position, b.position));
-                isRight = true;
+                    cellWhenPressed = currentCell;
+                    isRight = true;
                
                     readyToCurve = true;
                 }
@@ -52,11 +62,12 @@ public class BallBehaviour_2 : MonoBehaviour
             if (readyToCurveOnAir && gameObject.GetComponent<Rigidbody2D>().velocity.y > 0 && isGoingUp)
             {
                 gameObject.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-                StartCoroutine(Curve(gameObject.transform.position, currentCell.leftCell.GetComponent<CellBehaviour>().currentObject.transform.position));
+                StartCoroutine(Curve(gameObject.transform.position, currentCell.leftCell.GetComponent<CellBehaviour>().currentObject.transform.position, -360));
 
             }
             else
             {
+                cellWhenPressed = currentCell;
                 isRight = false;
 
                 readyToCurve = true;
@@ -65,9 +76,9 @@ public class BallBehaviour_2 : MonoBehaviour
             }
             if (Input.GetKeyUp(KeyCode.W) || MobileInput.swipeUp)
             {
-
-                //cellToMove = currentCell.leftCell.GetComponent<CellBehaviour>().currentObject.transform;
-                readyToJump = true;
+            cellWhenPressed = currentCell;
+            //cellToMove = currentCell.leftCell.GetComponent<CellBehaviour>().currentObject.transform;
+            readyToJump = true;
 
             }
         if (gameObject.GetComponent<Rigidbody2D>().velocity.y > 0)
@@ -82,11 +93,12 @@ public class BallBehaviour_2 : MonoBehaviour
             }
         }
         
-    }
+
+        }
     // Start is called before the first frame update
-    public IEnumerator Curve(Vector3 start, Vector2 target) {
+    public IEnumerator Curve(Vector3 start, Vector2 target, int dir) {
 
-
+        StartCoroutine(AnimateAroundAxis(transform, Vector3.back, dir, dur));
         float timePassed = 0f;
         Vector2 end = target;
 
@@ -100,12 +112,27 @@ public class BallBehaviour_2 : MonoBehaviour
             float height = Mathf.Lerp(0f, heightY, heightT);
 
             transform.position =  Vector2.Lerp(start, end, linearT) +  new Vector2(0f, height);
-
+        
             yield return null;
         
         }
        
     
+    }
+    IEnumerator AnimateAroundAxis(Transform trans, Vector3 axis, float changeInAngle, float duration)
+    {
+        var start = trans.rotation;
+        float t = 0f;
+        while (t < duration)
+        {
+            trans.rotation = start * Quaternion.AngleAxis(changeInAngle * t / duration, axis);
+
+            t += Time.deltaTime;
+            yield return null;
+        }
+        Debug.Log("asdfasdfsdafxcvzxcv");
+        trans.rotation = start * Quaternion.AngleAxis(changeInAngle, axis);
+        //first = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -113,29 +140,38 @@ public class BallBehaviour_2 : MonoBehaviour
 
         if (collision.gameObject.tag == "base" )
         {
-            if (readyToCurve)
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            if (readyToCurve && cellWhenPressed == currentCell)
+                
             {
                 if (isRight)
                 {
                     if (currentCell.rightCell)
                     {
+
                         cellToMove = currentCell.rightCell.GetComponent<CellBehaviour>().currentObject.transform;
+                        dir = 360;
                     }
                 }
                 else {
                     if (currentCell.leftCell)
                     {
                         cellToMove = currentCell.leftCell.GetComponent<CellBehaviour>().currentObject.transform;
+                        dir = -360;
                     }
 
                 }
-                StartCoroutine(Curve(gameObject.transform.position, cellToMove.position));
-                Debug.Log("HOWMANY");
-                readyToCurve = false;
+                
+                    StartCoroutine(Curve(gameObject.transform.position, cellToMove.position, dir));
+                    Debug.Log("HOWMANY");
+                    readyToCurve = false;
+                
 
             }
-            else if (readyToJump) {
-
+            else if (readyToJump && cellWhenPressed == currentCell) {
+                collision.gameObject.GetComponent<Animator>().SetTrigger("Boing");
+                GetComponent<Animator>().SetTrigger("Jump");
+                audsrc.PlayOneShot(jump);
                 gameObject.GetComponent<Rigidbody2D>().AddForce(transform.up * heightJump);
                 readyToJump = false;
                 isGoingUp= true;
@@ -154,42 +190,42 @@ public class BallBehaviour_2 : MonoBehaviour
         }
         if (collision.gameObject.tag == "wall") {
 
-            StartCoroutine(Curve(gameObject.transform.position, currentCell.currentObject.transform.position));
+            StartCoroutine(Curve(gameObject.transform.position, currentCell.currentObject.transform.position, 0));
 
         }
         if (collision.gameObject.tag == "baseskipl")
         {
-
-            StartCoroutine(Curve(gameObject.transform.position, currentCell.leftCell.GetComponent<CellBehaviour>().currentObject.transform.position));
+            collision.gameObject.GetComponent<Animator>().SetTrigger("Boing");
+            StartCoroutine(Curve(gameObject.transform.position, currentCell.leftCell.GetComponent<CellBehaviour>().currentObject.transform.position, -360));
         }
         if (collision.gameObject.tag == "baseskipl2")
         {
             if (currentCell.leftCell.GetComponent<CellBehaviour>().leftCell)
             {
                 StartCoroutine(Curve(gameObject.transform.position,
-                    currentCell.leftCell.GetComponent<CellBehaviour>().leftCell.GetComponent<CellBehaviour>().currentObject.transform.position));
+                    currentCell.leftCell.GetComponent<CellBehaviour>().leftCell.GetComponent<CellBehaviour>().currentObject.transform.position, -360));
             }
             else {
 
-                StartCoroutine(Curve(gameObject.transform.position, currentCell.leftCell.GetComponent<CellBehaviour>().currentObject.transform.position));
+                StartCoroutine(Curve(gameObject.transform.position, currentCell.leftCell.GetComponent<CellBehaviour>().currentObject.transform.position, -360));
             }
         }
         if (collision.gameObject.tag == "baseskipr")
         {
-
-            StartCoroutine(Curve(gameObject.transform.position, currentCell.rightCell.GetComponent<CellBehaviour>().currentObject.transform.position));
+            collision.gameObject.GetComponent<Animator>().SetTrigger("Boing");
+            StartCoroutine(Curve(gameObject.transform.position, currentCell.rightCell.GetComponent<CellBehaviour>().currentObject.transform.position, 360));
         }
         if (collision.gameObject.tag == "baseskipr2")
         {
             if (currentCell.rightCell.GetComponent<CellBehaviour>().rightCell)
             {
                 StartCoroutine(Curve(gameObject.transform.position,
-                    currentCell.rightCell.GetComponent<CellBehaviour>().rightCell.GetComponent<CellBehaviour>().currentObject.transform.position));
+                    currentCell.rightCell.GetComponent<CellBehaviour>().rightCell.GetComponent<CellBehaviour>().currentObject.transform.position, 360));
             }
             else
             {
 
-                StartCoroutine(Curve(gameObject.transform.position, currentCell.rightCell.GetComponent<CellBehaviour>().currentObject.transform.position));
+                StartCoroutine(Curve(gameObject.transform.position, currentCell.rightCell.GetComponent<CellBehaviour>().currentObject.transform.position, 360));
             }
         }
 
@@ -201,6 +237,7 @@ public class BallBehaviour_2 : MonoBehaviour
     {
         if (collision.gameObject.tag == "lose")
         {
+            audsrc.PlayOneShot(lose);
             if (UIManager.instance)
             {
                 UIManager.instance.LevelLost();
@@ -214,6 +251,7 @@ public class BallBehaviour_2 : MonoBehaviour
         }
         if (collision.gameObject.tag == "star")
         {
+            audsrc.PlayOneShot(coin);
             Debug.Log("Toco");
             if (LevelBehaviour.instance)
             {
@@ -224,6 +262,7 @@ public class BallBehaviour_2 : MonoBehaviour
         }
         if (collision.gameObject.tag == "spike")
         {
+            audsrc.PlayOneShot(lose);
             if (UIManager.instance)
             {
 

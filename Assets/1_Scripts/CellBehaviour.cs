@@ -127,11 +127,13 @@ public class CellBehaviour : MonoBehaviour
                 if (obj.tag == "base")
                 {
 
-                    obj.transform.localPosition = new Vector3(0, -0.4f, 0);
+                    obj.transform.localPosition = new Vector3(0, -0.45f, 0);
+                    obj.transform.localScale = new Vector3(0.64f, 0.41f, 1);
                 }
                 else if (obj.tag == "baseskipl" || obj.tag == "baseskipr" || obj.tag == "baseskipl2" || obj.tag == "baseskipr2" ) {
 
-                    obj.transform.localPosition = new Vector3(0, -0.3f, 0);
+                    obj.transform.localPosition = new Vector3(0, -0.28f, 0);
+                    obj.transform.localScale = new Vector3(0.64f, 0.41f, 1);
                 }
                 else if (obj.tag == "spike")
                 {

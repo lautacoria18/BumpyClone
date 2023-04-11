@@ -5,21 +5,40 @@ using UnityEngine.SceneManagement;
 
 public class SelectLevelManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField]
+    private GameObject lifePanel;
 
     public void LoadScene(int level) {
+        if (LifeSystem.instance.lives == 0)
+        {
 
-        SceneManager.LoadScene(level.ToString());
+            lifePanel.SetActive(true);
+
+        }
+        else
+        {
+            SceneManager.LoadScene(level.ToString());
+        }
+
+    
+    }
+
+    public void ClosePanel() {
+
+
+        GameObject.FindGameObjectWithTag("StagePanel").SetActive(false);
+    
+    }
+    public void CloseLifePanel() {
+
+
+        lifePanel.SetActive(false);
+
+
+    }
+    public void GoToMenu() {
+
+        SceneManager.LoadScene("MainMenu");
     
     }
 }
