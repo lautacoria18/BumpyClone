@@ -168,7 +168,7 @@ public class BallBehaviour_2 : MonoBehaviour
                 
 
             }
-            else if (readyToJump && cellWhenPressed == currentCell) {
+            else if (readyToJump && cellWhenPressed == currentCell && collision.gameObject.GetComponent<Animator>()) {
                 collision.gameObject.GetComponent<Animator>().SetTrigger("Boing");
                 GetComponent<Animator>().SetTrigger("Jump");
                 audsrc.PlayOneShot(jump);
@@ -200,8 +200,10 @@ public class BallBehaviour_2 : MonoBehaviour
         }
         if (collision.gameObject.tag == "baseskipl2")
         {
+            collision.gameObject.GetComponent<Animator>().SetTrigger("Boing");
             if (currentCell.leftCell.GetComponent<CellBehaviour>().leftCell)
             {
+
                 StartCoroutine(Curve(gameObject.transform.position,
                     currentCell.leftCell.GetComponent<CellBehaviour>().leftCell.GetComponent<CellBehaviour>().currentObject.transform.position, -360));
             }
@@ -217,6 +219,7 @@ public class BallBehaviour_2 : MonoBehaviour
         }
         if (collision.gameObject.tag == "baseskipr2")
         {
+            collision.gameObject.GetComponent<Animator>().SetTrigger("Boing");
             if (currentCell.rightCell.GetComponent<CellBehaviour>().rightCell)
             {
                 StartCoroutine(Curve(gameObject.transform.position,
@@ -242,7 +245,8 @@ public class BallBehaviour_2 : MonoBehaviour
             {
                 UIManager.instance.LevelLost();
             }
-            Destroy(gameObject);
+            gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePosition;
+            //Destroy(gameObject);
         }
         if (collision.gameObject.tag == "cell")
         {
@@ -270,7 +274,9 @@ public class BallBehaviour_2 : MonoBehaviour
 
 
             }
-            Destroy(gameObject);
+            gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePosition;
+            //Destroy(gameObject);
+          
         }
         if (collision.gameObject.tag == "winportal")
         {

@@ -11,17 +11,7 @@ public class CellBehaviour : MonoBehaviour
     public GameObject currentBase;
 
     public bool isWall;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+  
 
     private void OnMouseDown()
     {
@@ -63,41 +53,35 @@ public class CellBehaviour : MonoBehaviour
     }
     void CheckIfIsStar()
     {
-        if (gameObject.transform.Find(DropObjectManager.instance.objectSelected.name + "(Clone)"))
+        if (transform.Find(DropObjectManager.instance.objectSelected.name).gameObject.activeSelf)
         {
-            GameObject objToDestroy = gameObject.transform.Find(DropObjectManager.instance.objectSelected.name + "(Clone)").gameObject;
-            Destroy(objToDestroy);
-            return;
+            transform.Find(DropObjectManager.instance.objectSelected.name).gameObject.SetActive(false);
         }
         else
         {
-            GameObject obj = Instantiate(DropObjectManager.instance.objectSelected);
-            obj.transform.SetParent(gameObject.transform);
-            obj.transform.localScale = new Vector3(0.3290634f, 0.3488765f, 0.6944444f);
-            obj.transform.localPosition = new Vector3(0, 0, 0);
+            transform.Find(DropObjectManager.instance.objectSelected.name).gameObject.SetActive(true);
+
         }
 
 
     }
     void CheckIfIsBall()
     {
-        if (gameObject.transform.Find(DropObjectManager.instance.objectSelected.name + "(Clone)"))
+        if (transform.Find(DropObjectManager.instance.objectSelected.name).gameObject.activeSelf)
         {
-            GameObject objToDestroy = gameObject.transform.Find(DropObjectManager.instance.objectSelected.name + "(Clone)").gameObject;
-            Destroy(objToDestroy);
-            return;
+            transform.Find(DropObjectManager.instance.objectSelected.name).gameObject.SetActive(false);
+
         }
         else
         {
             if (GameObject.FindGameObjectWithTag("ball"))
             {
                 Destroy(GameObject.FindGameObjectWithTag("ball"));
+                GameObject.FindGameObjectWithTag("ball").SetActive(false);
 
             }
-            GameObject obj = Instantiate(DropObjectManager.instance.objectSelected);
-            obj.transform.SetParent(gameObject.transform);
-            obj.transform.localScale = new Vector3(0.3290634f, 0.3488765f, 0.6944444f);
-            obj.transform.localPosition = new Vector3(0, 0, 0);
+            transform.Find(DropObjectManager.instance.objectSelected.name).gameObject.SetActive(true);
+
         }
 
 
@@ -106,46 +90,22 @@ public class CellBehaviour : MonoBehaviour
 
         if (DropObjectManager.instance.objectSelected)
         {
-            Debug.Log(DropObjectManager.instance.objectSelected.name + "(Clone)");
-            if (gameObject.transform.Find(DropObjectManager.instance.objectSelected.name + "(Clone)"))
+            if (transform.Find(DropObjectManager.instance.objectSelected.name).gameObject.activeSelf)
+
             {
-                GameObject objToDestroy = gameObject.transform.Find(DropObjectManager.instance.objectSelected.name + "(Clone)").gameObject;
-                Destroy(objToDestroy);
-                return;
+                Debug.Log("nmo");
+                transform.Find(DropObjectManager.instance.objectSelected.name).gameObject.SetActive(false);
+
             }
             else
             {
-                Debug.Log("obnjetooo");
-                GameObject obj = Instantiate(DropObjectManager.instance.objectSelected);
-                if (currentBase)
+                if (currentBase && currentBase.activeSelf)
                 {
-                    Destroy(currentBase);
+                    currentBase.SetActive(false);
                 }
-                currentBase = obj;
-                obj.transform.SetParent(gameObject.transform);
-                obj.transform.localScale = new Vector3(0.8837325f, 0.05037692f, 0.9259259f);
-                if (obj.tag == "base")
-                {
-
-                    obj.transform.localPosition = new Vector3(0, -0.45f, 0);
-                    obj.transform.localScale = new Vector3(0.64f, 0.41f, 1);
-                }
-                else if (obj.tag == "baseskipl" || obj.tag == "baseskipr" || obj.tag == "baseskipl2" || obj.tag == "baseskipr2" ) {
-
-                    obj.transform.localPosition = new Vector3(0, -0.28f, 0);
-                    obj.transform.localScale = new Vector3(0.64f, 0.41f, 1);
-                }
-                else if (obj.tag == "spike")
-                {
-
-                    obj.transform.localPosition = new Vector3(0, -0.4f, 0);
-                }
-                if (obj.tag == "star" || obj.tag == "winportal")
-                {
-
-                    obj.transform.localPosition = new Vector3(0, 0f, 0);
-                    obj.transform.localScale = new Vector3(0.38f, 0.21f, 0.39f);
-                }
+                currentBase = transform.Find(DropObjectManager.instance.objectSelected.name).gameObject;
+                transform.Find(DropObjectManager.instance.objectSelected.name).gameObject.SetActive(true);
+                Debug.Log("si");
 
 
             }
@@ -154,22 +114,3 @@ public class CellBehaviour : MonoBehaviour
 
     }
 }
-/*if (DropObjectManager.instance.objectSelected) {
-           Debug.Log(DropObjectManager.instance.objectSelected.name + "(Clone)");
-           if (gameObject.transform.Find(DropObjectManager.instance.objectSelected.name + "(Clone)"))
-           {
-               GameObject objToDestroy = gameObject.transform.Find(DropObjectManager.instance.objectSelected.name + "(Clone)").gameObject;
-               Destroy(objToDestroy);
-               return;
-           }
-           else
-           {
-               Debug.Log("obnjetooo");
-               GameObject obj = Instantiate(DropObjectManager.instance.objectSelected);
-               obj.transform.SetParent(gameObject.transform);
-               obj.transform.localScale = new Vector3(0.8837325f, 0.05037692f, 0.9259259f);
-               obj.transform.localPosition = new Vector3(0, -0.4f, 0);
-           }
-
-       }
-       */

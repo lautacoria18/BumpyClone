@@ -73,6 +73,7 @@
     <Compile Include="Assets\1_Scripts\ObjectsSelect.cs" />
     <Compile Include="Assets\1_Scripts\UIEdit.cs" />
     <Compile Include="Assets\1_Scripts\AudioAndSounds\AudioScript.cs" />
+    <Compile Include="Assets\1_Scripts\Portal\PortalBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
