@@ -17,7 +17,9 @@ public class SelectLevelManager : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene(level.ToString());
+            GameManager.instance.SetLevelLoad(level.ToString());
+            SceneManager.LoadScene("Level");
+            //SceneManager.LoadScene(level.ToString());
         }
 
     

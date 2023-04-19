@@ -1,5 +1,8 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -10,40 +13,81 @@ public class UIEdit : MonoBehaviour
 
     public GameObject GridObject;
     public GameObject gridAtStart;
-    #region Rows 
-    [Header("0 Row")]
-    public GameObject c0x0;
-    public GameObject c0x1, c0x2, c0x3, c0x4, c0x5;
-    [Header("1 Row")]
-    public GameObject c1x0;
-    public GameObject c1x1, c1x2, c1x3, c1x4, c1x5;
-    [Header("2 Row")]
-    public GameObject c2x0;
-    public GameObject c2x1, c2x2, c2x3, c2x4, c2x5;
-    [Header("3 Row")]
-    public GameObject c3x0;
-    public GameObject c3x1, c3x2, c3x3, c3x4, c3x5;
-    [Header("4 Row")]
-    public GameObject c4x0;
-    public GameObject c4x1, c4x2, c4x3, c4x4, c4x5;
-    [Header("5 Row")]
-    public GameObject c5x0;
-    public GameObject c5x1, c5x2, c5x3, c5x4, c5x5;
-    [Header("6 Row")]
-    public GameObject c6x0;
-    public GameObject c6x1, c6x2, c6x3, c6x4, c6x5;
-    [Header("7 Row")]
-    public GameObject c7x0;
-    public GameObject c7x1, c7x2, c7x3, c7x4, c7x5;
-    #endregion
+
+    public CellBehaviour c0x0;
+
+
+    public List<GameObject> cellList = new List<GameObject>();
+
+    public Dictionary<string, List<string>> cell1Sample =
+           new Dictionary<string, List<string>>();
+
+    public List<string> listOfJson = new List<string>();
+
+    private Dictionary<string, List<string>> dict = new Dictionary<string, List<string>>();
+  
+
+
 
     private void Start()
     {
         Time.timeScale = 0f;
-       
+        cell1Sample.Add("c0X0", new List<string>() { "Ball", "Star", "Base" });
+        string json = JsonConvert.SerializeObject(cell1Sample);
+        var values = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(json);
+        Debug.Log(values["c0X0"][0]);
+        if (c0x0.gameObject.transform.Find(values["c0X0"][0])) {
+
+
+            c0x0.gameObject.transform.Find(values["c0X0"][0]).gameObject.SetActive(true);
+
+
+        }
+        string word = File.ReadAllText(Application.dataPath + "/listOfJson.json");
+        List<string> jsonList = JsonConvert.DeserializeObject<List<string>>(word);
+        foreach (string jason in jsonList)
+            Debug.Log(JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(jason));
+        //Debug.Log(jason);
+        //Debug.Log(word);
+
     }
 
-    
+    public void SaveLevelInJson() {
+
+        foreach (GameObject singleCell in cellList) {
+
+            SaveCell(singleCell);
+        }
+   
+        string json = JsonConvert.SerializeObject(dict);
+        if (!PlayerPrefs.HasKey("levelSaved"))
+        {
+            PlayerPrefs.SetInt("levelSaved", 1);
+        }
+
+        File.WriteAllText(Application.dataPath + "/level" + PlayerPrefs.GetInt("levelSaved").ToString() + ".json", json);
+        PlayerPrefs.SetInt("levelSaved", PlayerPrefs.GetInt("levelSaved") + 1);
+
+    }
+
+    public void SaveCell(GameObject cell) {
+
+
+        List<string> list = new List<string>();
+
+        foreach (Transform child in cell.transform) { 
+        
+            if (child.gameObject.activeSelf && child.name != "Circle" && child.name != "Empty")
+                list.Add(child.name);
+        
+        }
+        dict.Add(cell.name, list);
+        string json = JsonConvert.SerializeObject(dict);
+        listOfJson.Add(json);
+
+
+
+    }
 
     public void CleanAll() {
 

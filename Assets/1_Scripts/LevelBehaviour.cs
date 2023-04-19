@@ -15,19 +15,20 @@ public class LevelBehaviour : MonoBehaviour
     {
         Time.timeScale = 1f;
         instance = this;
-        winPortal = GameObject.FindGameObjectWithTag("winportal");
-        winPortal.SetActive(false);
 
-        foreach (Transform child in grid.transform)
+
+       // foreach (Transform child in grid.transform)
         {
-            Debug.Log("gOLSDASDA?");
-            child.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        //    Debug.Log("gOLSDASDA?");
+          //  child.gameObject.GetComponent<SpriteRenderer>().enabled = false;
         }
 
     }
     // Start is called before the first frame update
     void Start()
     {
+        winPortal = GameObject.FindGameObjectWithTag("winportal");
+        winPortal.SetActive(false);
         GameObject[] stars = GameObject.FindGameObjectsWithTag("star");
         starsInLevel = stars.Length;
     }

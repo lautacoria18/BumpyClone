@@ -45,9 +45,11 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene("SelectLevel");
     }
     public void LoadNextLevel() {
-        Debug.Log((int.Parse(SceneManager.GetActiveScene().name) + 1).ToString());
-        SceneManager.LoadScene((int.Parse(SceneManager.GetActiveScene().name) + 1).ToString() );
-    
+        //Debug.Log((int.Parse(SceneManager.GetActiveScene().name) + 1).ToString());
+        GameManager.instance.SetLevelLoad((GameManager.instance.GetLevelInt() + 1).ToString());
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        //SceneManager.LoadScene((int.Parse(SceneManager.GetActiveScene().name) + 1).ToString() );
+
     }
     
 

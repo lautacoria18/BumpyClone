@@ -64,6 +64,7 @@
     <Compile Include="Assets\1_Scripts\UI\Stage_UI.cs" />
     <Compile Include="Assets\1_Scripts\UIManager.cs" />
     <Compile Include="Assets\1_Scripts\BallBehaviour.cs" />
+    <Compile Include="Assets\1_Scripts\GameManager.cs" />
     <Compile Include="Assets\1_Scripts\CellBehaviour.cs" />
     <Compile Include="Assets\1_Scripts\MobileInput.cs" />
     <Compile Include="Assets\1_Scripts\LevelBehaviour.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Assets\1_Scripts\SelectLevelManager.cs" />
     <Compile Include="Assets\1_Scripts\ObjectsSelect.cs" />
     <Compile Include="Assets\1_Scripts\UIEdit.cs" />
+    <Compile Include="Assets\1_Scripts\Load\LoadFromFile.cs" />
     <Compile Include="Assets\1_Scripts\AudioAndSounds\AudioScript.cs" />
     <Compile Include="Assets\1_Scripts\Portal\PortalBehaviour.cs" />
   </ItemGroup>
